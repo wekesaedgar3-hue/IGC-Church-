@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modern Church User Dashboard</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- GLightbox CSS -->
+<link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+
+<style>
+/* Hero Section */
+.hero {
+    height: 500px;
+    background: url('https://wallpaperaccess.com/full/2637581.jpg') center/cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: inset 0 0 0 5000px rgba(0,0,0,0.3);
+}
+
+.hero-text h1 {
+    color: #fff;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+.hero-text p {
+    color: #fff;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+}
+/* Chat Section Styling */
+#chatSection {
+  background: linear-gradient(135deg, #87ceeb, #e0f7fa); /* sky blue gradient */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  color: #003366; /* deep blue text for contrast */
+}
+
+/* Chat Window */
+#chatWindow {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #b3e5fc;
+  padding: 12px;
+  background-color: #f0fbff; /* very light sky blue */
+  border-radius: 8px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Input and Button */
+#chatForm input.form-control {
+  border-radius: 20px;
+  border: 1px solid #81d4fa;
+}
+
+#chatForm button {
+  border-radius: 20px;
+  background-color: #0288d1;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+#chatForm button:hover {
+  background-color: #0277bd;
+}
+
+/* Section Title */
+.section-title {
+  font-weight: 600;
+  color: #01579b;
+  text-shadow: 1px 1px 3px rgba(255,255,255,0.6);
+}
+
+/* Muted Text */
+.small-muted {
+  font-size: 0.85rem;
+  color: #004d66;
+}
+
+/* Additional styles */
+.full-width-section {
+    width: 100%;
+}
+.small-muted {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+.required {
+    color: red;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">My Church</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#homeSection">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#aboutSection">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#servicesSection">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#projectsSection">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#paymentsSection">Payments</a></li>
+        <li class="nav-item"><a class="nav-link" href="#testimonySection">Testimonies</a></li>
+        <li class="nav-item"><a class="nav-link" href="#chatSection">Chat</a></li>
+        <li class="nav-item">
+  <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#registrationModal">Register</a></button>
+</li>
+<li class="nav-item">
+  <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></button>
+</li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO IMAGE -->
+<div class="hero">
+  <div class="hero-text">
+    <h1 class="display-4">Welcome to Our Church</h1>
+    <p class="lead">Join us in worship and community</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="row mx-0">
+
+  <!-- LEFT COLUMN -->
+  <div class="col-lg-8 px-3">
+<!-- REGISTRATION MODAL -->
+ <section id="homeSection" class="mb-4 full-width-section">
+<div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registrationModalLabel">Register</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="registrationForm">
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" name="fullName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Branch</label>
+            <select name="branch" class="form-select" required>
+              <option value="kisumu">Kisumu</option>
+              <option value="kimilili">Kimilili</option>
+              <option value="nakuru">Nakuru</option>
+              <option value="bungoma">Bungoma</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Cell Group</label>
+            <select name="cellGroup" class="form-select" required>
+              <option value="group1">Group 1</option>
+              <option value="group2">Group 2</option>
+              <option value="group3">Group 3</option>
+              <option value="group4">Group 4</option>
+              <option value="group5">Group 5</option>
+            </select>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- LOGIN MODAL -->
+  <section id="homeSection" class="mb-4 full-width-section">
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm">
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" name="fullName" required>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+    <!-- HOME -->
+    <section id="homeSection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">Mission & Vision</h3>
+        <p id="missionVision">Loading mission & vision...</p>
+
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Upcoming Events</h5>
+            <ul id="eventsList" class="list-group list-group-flush"></ul>
+          </div>
+          <div class="col-md-6">
+            <h5>Latest Sermons</h5>
+            <div id="sermonsList">No sermons yet</div>
+          </div>
+        </div>
+
+        <hr>
+        <h5>Highlights (Photos & Videos)</h5>
+        <div id="mediaCarousel" class="d-flex gap-2 flex-wrap"></div>
+      </div>
+    </section>
+
+ <!-- ABOUT -->
+<section id="aboutSection" class="mb-4 full-width-section">
+  <div class="card p-3">
+    <h3 class="section-title">About the Church</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <h6>History</h6>
+        <p id="history">Loading church history...</p>
+        <h6>Statement of Faith</h6>
+        <p id="statement">Our statement of faith...</p>
+      </div>
+      <div class="col-md-6">
+        <h6>Leadership & Pastors</h6>
+        <div id="leadership">Pastor names & roles...</div>
+        <h6>Ministries</h6>
+        <ul>
+          <li>Youth</li><li>Men</li><li>Women</li><li>Choir</li><li>Children</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+    <h5>Highlights (Photos & Videos)</h5>
+    <div id="mediaCarousel" class="d-flex gap-3 flex-wrap"></div>
+
+    <!-- Photo Highlights Slideshow -->
+<h5 class="mt-4">Photo Highlights</h5>
+<div id="photoCarousel" class="carousel slide" data-bs-interval="false">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://images.unsplash.com/photo-1585399261440-4c3b4c7c7f6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+           class="d-block w-100 media-clickable" alt="Church Choir">
+    </div>
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+           class="d-block w-100 media-clickable" alt="Outdoor Church Gathering">
+    </div>
+    <div class="carousel-item">
+      <img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+           class="d-block w-100 media-clickable" alt="Church Worship Band">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#photoCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#photoCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<!-- Video Highlights Slideshow -->
+<h5 class="mt-4">Video Highlights</h5>
+<div id="videoCarousel" class="carousel slide" data-bs-interval="false">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <iframe class="media-clickable" width="100%" height="400"
+              src="https://www.youtube.com/embed/gIAxcrBa3CA"
+              title="Top 10 Church Event Ideas" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div class="carousel-item">
+      <iframe class="media-clickable" width="100%" height="400"
+              src="https://www.youtube.com/embed/ByFaithIgniterMedia"
+              title="By Faith Worship Intro" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div class="carousel-item">
+      <iframe class="media-clickable" width="100%" height="400"
+              src="https://www.youtube.com/embed/BigChurchFestival2025"
+              title="Big Church Festival Highlights" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#videoCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#videoCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+
+<script>
+  // Load media uploaded by admin dynamically
+  async function loadMedia() {
+    const response = await fetch('/api/media'); // backend should return array of media objects
+    const mediaItems = await response.json();
+
+    const mediaCarousel = document.getElementById('mediaCarousel');
+    mediaCarousel.innerHTML = '';
+
+    mediaItems.forEach(item => {
+      let mediaElement;
+      if (item.type === 'image') {
+        mediaElement = `<img src="${item.url}" alt="${item.title}" class="img-thumbnail media-clickable" style="max-width:200px;">`;
+      } else if (item.type === 'video') {
+        mediaElement = `
+          <video controls class="media-clickable" style="max-width:300px;">
+            <source src="${item.url}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>`;
+      }
+      mediaCarousel.innerHTML += `<div>${mediaElement}<div class="small-muted">${item.title}</div></div>`;
+    });
+
+    // Add fullscreen click behavior
+    document.querySelectorAll('.media-clickable').forEach(el => {
+      el.addEventListener('click', () => {
+        if (el.requestFullscreen) {
+          el.requestFullscreen();
+        } else if (el.webkitRequestFullscreen) {
+          el.webkitRequestFullscreen();
+        } else if (el.msRequestFullscreen) {
+          el.msRequestFullscreen();
+        }
+      });
+    });
+  }
+
+  loadMedia();
+</script>
+
+
+    <!-- SERVICE TIMES & LOCATION -->
+    <section id="servicesSection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">Service Times & Location</h3>
+        <p><strong>Sunday:</strong> 9:00 AM & 5:00 PM<br><strong>Mid-week:</strong> Wednesday 7:00 PM</p>
+        <div id="mapArea">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.123456!2d36.8219!3d-1.2921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10a0abcd123%3A0x1234abcd5678ef90!2sYour+Church+Name!5e0!3m2!1sen!2ske!4v1234567890" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <p class="mt-2"><strong>Contact:</strong> <span id="contactPhone">+2547xxxxxxx</span></p>
+        <p class="small-muted">Social: <a href="#" id="socialLinks">Facebook / Twitter / Instagram</a></p>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projectsSection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">Church Projects</h3>
+        <div id="projectsList">
+          <div class="mb-2"><strong>Building Project:</strong> New Sanctuary <br>Donation Progress: 60%</div>
+          <div class="mb-2"><strong>Mission Project:</strong> Outreach Program <br>Donation Progress: 85%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIES -->
+    <section id="testimonySection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">Submit Testimony</h3>
+        <form id="testimonyForm">
+          <div class="mb-2"><input name="name" class="form-control" placeholder="Your Name" required></div>
+          <div class="mb-2"><textarea name="testimony" class="form-control" rows="3" placeholder="Write your testimony" required></textarea></div>
+          <div class="d-grid gap-2"><button class="btn btn-success" type="submit">Submit</button></div>
+        </form>
+      </div>
+    </section>
+
+  
+  <!-- PAYMENTS -->
+<section id="paymentsSection" class="py-4" style="width:100%;">
+  <h3 class="section-title px-3">Payments & Donations</h3>
+  <form id="paymentForm" class="px-3">
+    <div class="mb-2">
+      <label class="form-label">Payment type <span class="required">*</span></label>
+      <select name="type" class="form-select" required>
+        <option value="tithe">Tithe</option>
+        <option value="offering">Offering</option>
+        <option value="yearly">Yearly Contribution</option>
+        <option value="pledge">Pledge</option>
+      </select>
+    </div>
+    <div class="mb-2">
+      <input name="amount" type="number" class="form-control" placeholder="Amount (KES)" required min="1">
+    </div>
+    <div class="mb-2">
+      <label class="form-label">Payment method</label>
+      <select id="paymentProvider" name="provider" class="form-select">
+        <option value="mpesa">M-Pesa (STK push)</option>
+        <option value="bank">Bank Transfer</option>
+      </select>
+    </div>
+    <div class="mb-2" id="bankFields" style="display:none">
+      <input name="bank_account" class="form-control" placeholder="Account number / Bank details">
+      <div class="small-muted">Complete payment at bank & mark as paid or upload receipt to admin.</div>
+    </div>
+    <div class="d-grid gap-2">
+      <button id="payMpesaBtn" class="btn btn-warning" type="submit">Pay / Initiate</button>
+    </div>
+  </form>
+  <hr>
+  <h6 class="px-3">Your payments</h6>
+  <div id="paymentHistoryList" class="small-muted px-3"></div>
+  <div id="balanceInfo" class="mt-2 px-3"></div>
+</section>
+
+<script>
+  // Show/hide bank fields depending on provider
+  document.getElementById('paymentProvider').addEventListener('change', function() {
+    const bankFields = document.getElementById('bankFields');
+    bankFields.style.display = (this.value === 'bank') ? 'block' : 'none';
+  });
+
+  // Handle payment form submission
+  document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Example: assume backend exposes current user info with cell_group_id
+    const userResponse = await fetch('/api/me');
+    const userData = await userResponse.json();
+
+    const formData = {
+      type: this.type.value,
+      amount: parseFloat(this.amount.value),
+      provider: this.provider.value,
+      cell_group_id: userData.cell_group_id // attach group ID
+    };
+
+    const response = await fetch('/api/payments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    const result = await response.json();
+
+    // Update payment history
+    document.getElementById('paymentHistoryList').innerHTML +=
+      `<div>${result.type} - ${result.amount} KES (${result.status})</div>`;
+
+    // If pledge or yearly, show remaining balance
+    if (result.type === 'pledge' || result.type === 'yearly') {
+      const balanceInfo = document.getElementById('balanceInfo');
+      balanceInfo.innerHTML =
+        `<strong>${result.type} Summary:</strong><br>
+         Total Target: ${result.total_target} KES<br>
+         Paid So Far: ${result.paid_so_far} KES<br>
+         Remaining: ${result.remaining} KES<br>
+         Deadline: ${result.deadline}`;
+    }
+
+    this.reset();
+  });
+</script>
+
+<!-- DECLARE PLEDGE / YEARLY -->
+<section id="declareSection" class="py-4" style="width:100%;">
+  <h3 class="section-title px-3">Declare Contribution</h3>
+  <form id="declareForm" class="px-3">
+    <div class="mb-2">
+      <label class="form-label">Contribution Type</label>
+      <select name="declareType" class="form-select" required>
+        <option value="pledge">Pledge</option>
+        <option value="yearly">Yearly Contribution</option>
+      </select>
+    </div>
+    <div class="mb-2">
+      <input name="target" type="number" class="form-control" placeholder="Total Amount (KES)" required min="1">
+    </div>
+    <div class="mb-2">
+      <input name="deadline" type="date" class="form-control" required>
+    </div>
+    <div class="d-grid gap-2">
+      <button class="btn btn-success" type="submit">Declare</button>
+    </div>
+  </form>
+</section>
+
+<!-- EXISTING PAYMENT FORM (interval payments) -->
+<section id="paymentsSection2" class="py-4" style="width:100%;">
+  <h3 class="section-title px-3">Payments & Donations</h3>
+  <!-- ... your existing payment form ... -->
+  <hr>
+  <h6 class="px-3">Your payments</h6>
+  <div id="paymentHistoryList" class="small-muted px-3"></div>
+  <div id="balanceInfo" class="mt-2 px-3"></div>
+</section>
+
+<script>
+  // Handle declaration
+  document.getElementById('declareForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const userResponse = await fetch('/api/me');
+    const userData = await userResponse.json();
+
+    const declareData = {
+      type: this.declareType.value,
+      total_target: parseFloat(this.target.value),
+      deadline: this.deadline.value,
+      cell_group_id: userData.cell_group_id
+    };
+
+    const response = await fetch('/api/commitments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(declareData)
+    });
+
+    const result = await response.json();
+    document.getElementById('balanceInfo').innerHTML =
+      `<strong>${result.type} Declared:</strong><br>
+       Total Target: ${result.total_target} KES<br>
+       Remaining: ${result.remaining} KES<br>
+       Deadline: ${result.deadline}`;
+    this.reset();
+  });
+
+  // Existing payment form logic (interval payments)
+  document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const userResponse = await fetch('/api/me');
+    const userData = await userResponse.json();
+
+    const formData = {
+      type: this.type.value,
+      amount: parseFloat(this.amount.value),
+      provider: this.provider.value,
+      cell_group_id: userData.cell_group_id
+    };
+
+    const response = await fetch('/api/payments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    const result = await response.json();
+    document.getElementById('paymentHistoryList').innerHTML +=
+      `<div>${result.type} - ${result.amount} KES (${result.status})</div>`;
+
+    if (result.type === 'pledge' || result.type === 'yearly') {
+      document.getElementById('balanceInfo').innerHTML =
+        `<strong>${result.type} Summary:</strong><br>
+         Total Target: ${result.total_target} KES<br>
+         Paid So Far: ${result.paid_so_far} KES<br>
+         Remaining: ${result.remaining} KES<br>
+         Deadline: ${result.deadline}`;
+    }
+    this.reset();
+  });
+</script>
+
+
+   <!-- Cell Group Section -->
+<div class="card p-3 mb-3 full-width-section" id="cellGroupSection">
+  <h3 class="section-title">Your Cell Group</h3>
+  <div id="groupDetails"></div>
+  <h5>Members</h5>
+  <ul id="membersList" class="list-group list-group-flush"></ul>
+</div>
+
+<script>
+  async function loadCellGroup() {
+    const response = await fetch('/api/my-cell-group'); // backend returns group + members
+    const data = await response.json();
+
+    // Show group details
+    document.getElementById('groupDetails').innerHTML =
+      `<strong>${data.group.name}</strong><br>
+       Leader: ${data.group.leader}<br>
+       Time: ${data.group.time}`;
+
+    // Show members
+    const membersList = document.getElementById('membersList');
+    membersList.innerHTML = '';
+    data.members.forEach(m => {
+      membersList.innerHTML += `<li class="list-group-item">${m.name}</li>`;
+    });
+  }
+
+  loadCellGroup();
+</script>
+
+    <!-- CHAT -->
+    <div class="card p-3 mb-3 full-width-section" id="chatSection">
+      <h3 class="section-title">Chat with Church Assistant</h3>
+      <div id="chatWindow"></div>
+      <form id="chatForm" class="d-flex gap-2 mt-2">
+        <input name="message" class="form-control" placeholder="Ask anything..." required>
+        <button class="btn btn-outline-primary" type="submit">Send</button>
+      </form>
+      <div class="small-muted mt-2">This chat calls <code>/api/chat</code>.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- GLightbox JS -->
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+<script>
+// Load demo data
+function loadDashboardData() {
+  document.getElementById('missionVision').textContent = 'Mission: Worship God, disciple believers, serve the community. Vision: Transform lives through Christ.';
+  document.getElementById('history').textContent = 'Founded in [year], our church has grown from a small home group to a vibrant community.';
+  document.getElementById('statement').textContent = 'We hold to the Bible, Trinity, salvation through Christ, and gospel living.';
+  document.getElementById('leadership').textContent = 'Senior Pastor: John Doe; Associate Pastor: Jane Smith; Elders: ...';
+  document.getElementById('contactPhone').textContent = '+254 7XXXXXXX';
+
+  document.getElementById('eventsList').innerHTML = '<li class="list-group-item">Annual Conference - 2025-10-12</li><li class="list-group-item">Community Outreach - 2025-08-20</li>';
+  document.getElementById('sermonsList').innerHTML = '<div class="small-muted">Sermon: Hope in Christ — Pastor John (Audio/Video)</div>';
+
+
+// Handle registration 
+document.getElementById('registrationForm').addEventListener('submit'), function(e) { e.preventDefault();  const formData = new FormData(e.target);  const userData = {    fullName: formData.get('fullName'),    branch: formData.get('branch'),    cellGroup: formData.get('cellGroup')  };
+  // Store user data in local storage (or handle it via a backend API) 
+ localStorage.setItem('user', JSON.stringify(userData));  alert('Registration successful!');  
+ // Close modal
+  const media = [
+    { type:'image', url:'https://placehold.co/400x300?text=Church+1' },
+    { type:'image', url:'https://placehold.co/400x300?text=Church+2' },
+    { type:'video', url:'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' }
+  ];
+  const carousel = document.getElementById('mediaCarousel');
+  carousel.innerHTML = '';
+  media.forEach(m=>{
+    let el = document.createElement('a');
+    el.href = m.url;
+    el.className = 'media-thumb glightbox';
+    el.setAttribute('data-gallery','churchGallery');
+    if(m.type==='image') el.innerHTML = `<img src="${m.url}" class="img-fluid">`;
+    else el.innerHTML = `<video src="${m.url}" class="img-fluid" muted loop></video>`;
+    carousel.appendChild(el);
+  });
+  GLightbox({ selector: '.glightbox' });
+
+}
+}
+
+// Toggle bank fields
+document.getElementById('paymentProvider').addEventListener('change', e=>{
+  document.getElementById('bankFields').style.display = e.target.value==='bank'?'block':'none';
+});
+
+window.addEventListener('load', loadDashboardData);
+</script>
+
+</body>
+</html>

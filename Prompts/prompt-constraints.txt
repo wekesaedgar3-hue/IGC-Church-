@@ -1,0 +1,7 @@
+Your task is as follows:
+Name three African countries.
+
+Output Constraints:
+- Exactly three names
+- No explanations
+- Present them as a numbered list

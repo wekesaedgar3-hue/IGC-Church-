@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modern Church User Dashboard</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- GLightbox CSS -->
+<link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+
+<style>
+/* Hero Section */
+.hero {
+    height: 500px;
+    background: url('https://images.unsplash.com/photo-1579547621706-1a9c79d5a1f4?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: inset 0 0 0 5000px rgba(0,0,0,0.3); /* dark overlay for text readability */
+}
+.hero-text h1 {
+    color: #fff;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+.hero-text p {
+    color: #fff;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+}
+
+/* Additional styles */
+.full-width-section {
+    width: 100%;
+}
+.small-muted {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+.required {
+    color: red;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">My Church</a>
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#homeSection">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#aboutSection">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#servicesSection">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#projectsSection">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#paymentsSection">Payments</a></li>
+        <li class="nav-item"><a class="nav-link" href="#testimonySection">Testimonies</a></li>
+        <li class="nav-item"><a class="nav-link" href="#chatSection">Chat</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO IMAGE -->
+<div class="hero">
+  <div class="hero-text">
+    <h1 class="display-4">Welcome to Our Church</h1>
+    <p class="lead">Join us in worship and community</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="row mx-0">
+
+  <!-- LEFT COLUMN -->
+  <div class="col-lg-8 px-3">
+
+    <!-- HOME -->
+    <section id="homeSection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">Mission & Vision</h3>
+        <p id="missionVision">Loading mission & vision...</p>
+
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Upcoming Events</h5>
+            <ul id="eventsList" class="list-group list-group-flush"></ul>
+          </div>
+          <div class="col-md-6">
+            <h5>Latest Sermons</h5>
+            <div id="sermonsList">No sermons yet</div>
+          </div>
+        </div>
+
+        <hr>
+        <h5>Highlights (Photos & Videos)</h5>
+        <div id="mediaCarousel" class="d-flex gap-2 flex-wrap"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="aboutSection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">About the Church</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <h6>History</h6>
+            <p id="history">Loading church history...</p>
+            <h6>Statement of Faith</h6>
+            <p id="statement">Our statement of faith...</p>
+          </div>
+          <div class="col-md-6">
+            <h6>Leadership & Pastors</h6>
+            <div id="leadership">Pastor names & roles...</div>
+            <h6>Ministries</h6>
+            <ul>
+              <li>Youth</li><li>Men</li><li>Women</li><li>Choir</li><li>Children</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICE TIMES & LOCATION -->
+    <section id="servicesSection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">Service Times & Location</h3>
+        <p><strong>Sunday:</strong> 9:00 AM & 5:00 PM<br><strong>Mid-week:</strong> Wednesday 7:00 PM</p>
+        <div id="mapArea">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.123456!2d36.8219!3d-1.2921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10a0abcd123%3A0x1234abcd5678ef90!2sYour+Church+Name!5e0!3m2!1sen!2ske!4v1234567890" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <p class="mt-2"><strong>Contact:</strong> <span id="contactPhone">+2547xxxxxxx</span></p>
+        <p class="small-muted">Social: <a href="#" id="socialLinks">Facebook / Twitter / Instagram</a></p>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projectsSection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">Church Projects</h3>
+        <div id="projectsList">
+          <div class="mb-2"><strong>Building Project:</strong> New Sanctuary <br>Donation Progress: 60%</div>
+          <div class="mb-2"><strong>Mission Project:</strong> Outreach Program <br>Donation Progress: 85%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIES -->
+    <section id="testimonySection" class="mb-4 full-width-section">
+      <div class="card p-3">
+        <h3 class="section-title">Submit Testimony</h3>
+        <form id="testimonyForm">
+          <div class="mb-2"><input name="name" class="form-control" placeholder="Your Name" required></div>
+          <div class="mb-2"><textarea name="testimony" class="form-control" rows="3" placeholder="Write your testimony" required></textarea></div>
+          <div class="d-grid gap-2"><button class="btn btn-success" type="submit">Submit</button></div>
+        </form>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="col-lg-4 px-3">
+
+    <!-- PAYMENTS -->
+    <div class="card p-3 mb-3 full-width-section" id="paymentsSection">
+      <h3 class="section-title">Payments & Donations</h3>
+      <form id="paymentForm">
+        <div class="mb-2">
+          <label class="form-label">Payment type <span class="required">*</span></label>
+          <select name="type" class="form-select" required>
+            <option value="tithe">Tithe</option>
+            <option value="offering">Offering</option>
+            <option value="yearly">Yearly Contribution</option>
+            <option value="pledge">Pledge</option>
+          </select>
+        </div>
+        <div class="mb-2"><input name="amount" type="number" class="form-control" placeholder="Amount (KES)" required min="1"></div>
+        <div class="mb-2">
+          <label class="form-label">Payment method</label>
+          <select id="paymentProvider" name="provider" class="form-select">
+            <option value="mpesa">M-Pesa (STK push)</option>
+            <option value="bank">Bank Transfer</option>
+          </select>
+        </div>
+        <div class="mb-2" id="bankFields" style="display:none">
+          <input name="bank_account" class="form-control" placeholder="Account number / Bank details">
+          <div class="small-muted">Complete payment at bank & mark as paid or upload receipt to admin.</div>
+        </div>
+        <div class="d-grid gap-2"><button id="payMpesaBtn" class="btn btn-warning" type="submit">Pay / Initiate</button></div>
+      </form>
+      <hr>
+      <h6>Your payments</h6>
+      <div id="paymentHistoryList" class="small-muted"></div>
+    </div>
+
+    <!-- CELL GROUPS -->
+    <div class="card p-3 mb-3 full-width-section">
+      <h3 class="section-title">Cell Groups</h3>
+      <div id="cellGroupsList">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>Group 1:</strong> Leader - Alice, Time - Mon 6 PM, Members - 12</li>
+          <li class="list-group-item"><strong>Group 2:</strong> Leader - Bob, Time - Tue 6 PM, Members - 10</li>
+          <li class="list-group-item"><strong>Group 3:</strong> Leader - Carol, Time - Wed 6 PM, Members - 8</li>
+          <li class="list-group-item"><strong>Group 4:</strong> Leader - David, Time - Thu 6 PM, Members - 9</li>
+          <li class="list-group-item"><strong>Group 5:</strong> Leader - Eve, Time - Fri 6 PM, Members - 11</li>
+          <li class="list-group-item"><strong>Group 6:</strong> Leader - Frank, Time - Sat 5 PM, Members - 7</li>
+          <li class="list-group-item"><strong>Group 7:</strong> Leader - Grace, Time - Sun 5 PM, Members - 6</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="card p-3 mb-3 full-width-section" id="chatSection">
+      <h3 class="section-title">Chat with Church Assistant</h3>
+      <div id="chatWindow"></div>
+      <form id="chatForm" class="d-flex gap-2 mt-2">
+        <input name="message" class="form-control" placeholder="Ask anything..." required>
+        <button class="btn btn-outline-primary" type="submit">Send</button>
+      </form>
+      <div class="small-muted mt-2">This chat calls <code>/api/chat</code>.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- GLightbox JS -->
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+<script>
+// Load demo data
+function loadDashboardData() {
+  document.getElementById('missionVision').textContent = 'Mission: Worship God, disciple believers, serve the community. Vision: Transform lives through Christ.';
+  document.getElementById('history').textContent = 'Founded in [year], our church has grown from a small home group to a vibrant community.';
+  document.getElementById('statement').textContent = 'We hold to the Bible, Trinity, salvation through Christ, and gospel living.';
+  document.getElementById('leadership').textContent = 'Senior Pastor: John Doe; Associate Pastor: Jane Smith; Elders: ...';
+  document.getElementById('contactPhone').textContent = '+254 7XXXXXXX';
+
+  document.getElementById('eventsList').innerHTML = '<li class="list-group-item">Annual Conference - 2025-10-12</li><li class="list-group-item">Community Outreach - 2025-08-20</li>';
+  document.getElementById('sermonsList').innerHTML = '<div class="small-muted">Sermon: Hope in Christ — Pastor John (Audio/Video)</div>';
+
+  const media = [
+    { type:'image', url:'https://placehold.co/400x300?text=Church+1' },
+    { type:'image', url:'https://placehold.co/400x300?text=Church+2' },
+    { type:'video', url:'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' }
+  ];
+  const carousel = document.getElementById('mediaCarousel');
+  carousel.innerHTML = '';
+  media.forEach(m=>{
+    let el = document.createElement('a');
+    el.href = m.url;
+    el.className = 'media-thumb glightbox';
+    el.setAttribute('data-gallery','churchGallery');
+    if(m.type==='image') el.innerHTML = `<img src="${m.url}" class="img-fluid">`;
+    else el.innerHTML = `<video src="${m.url}" class="img-fluid" muted loop></video>`;
+    carousel.appendChild(el);
+  });
+  GLightbox({ selector: '.glightbox' });
+}
+
+// Toggle bank fields
+document.getElementById('paymentProvider').addEventListener('change', e=>{
+  document.getElementById('bankFields').style.display = e.target.value==='bank'?'block':'none';
+});
+
+window.addEventListener('load', loadDashboardData);
+</script>
+
+</body>
+</html>
+
