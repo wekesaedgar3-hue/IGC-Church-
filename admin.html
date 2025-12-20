@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IGC Church Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --muted: #1f2937;
+      --text: #e5e7eb;
+      --text-dim: #9ca3af;
+      --primary: #22c55e;
+      --primary-2: #16a34a;
+      --accent: #38bdf8;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --border: #253146;
+      --card: #101623;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1150px 550px at 20% 50%, #0b132a, #0a1124 50%, #070d1a 100%);
+      color: var(--text);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: #0b132acc;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 16px;
+      padding: 16px 20px;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand .logo {
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 0 0 1px #ffffff30 inset, 0 8px 20px #22c55e30;
+      font-weight: 800;
+      color: #02140a;
+    }
+    .brand h1 {
+      margin: 0; font-size: 18px; letter-spacing: 0.2px;
+    }
+    .filters {
+      display: flex; gap: 10px; align-items: center;
+    }
+    .filters select, .filters input {
+      background: #0b1426; color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 10px;
+      min-width: 160px;
+      outline: none;
+    }
+    .filters input[type="date"] { min-width: 155px; }
+    .actions {
+      display: flex; gap: 8px;
+    }
+    .btn {
+      border: 1px solid var(--border); background: #0c1628; color: var(--text);
+      padding: 8px 12px; border-radius: 10px; cursor: pointer;
+    }
+    .btn.primary { background: linear-gradient(180deg, var(--primary), var(--primary-2)); color: #02140a; font-weight: 600; border-color: #18a355; }
+    .btn.accent { background: linear-gradient(180deg, #60a5fa, #38bdf8); color: #07121f; font-weight: 600; border-color: #2c80aa; }
+    .btn.danger { background: linear-gradient(180deg, #fb7185, #ef4444); color: #23090c; font-weight: 600; border-color: #c03636; }
+    main {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+    nav.sidebar {
+      position: sticky; top: 80px;
+      height: calc(100vh - 100px);
+      overflow: auto;
+      background: #0b1426;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    nav.sidebar h3 {
+      margin: 6px 8px 10px; font-size: 13px; text-transform: uppercase; color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .menu { display: grid; gap: 6px; }
+    .menu button {
+      text-align: left;
+      background: #0e1627;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .menu button.active { border-color: var(--primary); box-shadow: 0 0 0 1px #22c55e50 inset; }
+    section.panel {
+      background: #0b1426;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .grid-2 {
+      display: grid; gap: 16px; grid-template-columns: 1fr 1fr;
+    }
+    .cards { display: grid; gap: 14px; grid-template-columns: repeat(4, 1fr); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px;
+    }
+    .card h4 { margin: 0 0 8px; font-size: 14px; color: var(--text-dim); }
+    .card .num { font-size: 22px; font-weight: 700; letter-spacing: 0.3px; }
+    table {
+      width: 100%; border-collapse: collapse; background: var(--card);
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    }
+    thead th {
+      text-align: left; background: #0f1829; color: var(--text-dim);
+      font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+      padding: 10px; border-bottom: 1px solid var(--border);
+    }
+    tbody td {
+      padding: 10px; border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    tbody tr:hover { background: #0c1526; }
+    .pill {
+      display: inline-block; padding: 5px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border);
+    }
+    .pill.tithe { background: #062313; color: #9ff2c0; border-color: #134b2c; }
+    .pill.offering { background: #061f2b; color: #9fd9f2; border-color: #1e4c63; }
+    .pill.pledge { background: #2a1711; color: #f3c19f; border-color: #6b3d2b; }
+    .pill.yearly { background: #2a1b06; color: #f3d49f; border-color: #6b512b; }
+    .stack { display: grid; gap: 10px; }
+    .form-row { display: grid; gap: 10px; grid-template-columns: repeat(4, 1fr); }
+    .form-row .field { display: grid; gap: 6px; }
+    .field label { font-size: 12px; color: var(--text-dim); }
+    .field input, .field select, .field textarea {
+      background: #0d1627; border: 1px solid var(--border);
+      color: var(--text); border-radius: 10px; padding: 8px 10px;
+      outline: none;
+    }
+    .section-title {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .section-title h2 { margin: 0; font-size: 18px; }
+    .gallery {
+      display: grid; gap: 12px; grid-template-columns: repeat(5, 1fr);
+    }
+    .media-tile {
+      border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      background: #0e1627;
+    }
+    .media-tile img, .media-tile video { width: 100%; height: 120px; object-fit: cover; display: block; }
+    .media-tile .meta { padding: 8px; font-size: 12px; color: var(--text-dim); }
+    .totals-footer {
+      display: flex; justify-content: flex-end; gap: 18px; padding: 10px 0;
+      color: var(--text-dim);
+    }
+    .muted { color: var(--text-dim); }
+    .flex { display: flex; gap: 10px; }
+    .mt { margin-top: 14px; }
+    .hidden { display: none !important; }
+    @media (max-width: 1100px) {
+      main { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+      .grid-2 { grid-template-columns: 1fr; }
+      .gallery { grid-template-columns: repeat(2, 1fr); }
+      .form-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="logo">IG</div>
+        <h1>IGC Church Admin Dashboard</h1>
+      </div>
+      <div class="filters">
+        <select id="filterBranch"></select>
+        <select id="filterCell"></select>
+        <input type="date" id="filterFrom">
+        <input type="date" id="filterTo">
+        <button class="btn" id="resetFilters">Reset</button>
+      </div>
+      <div class="actions">
+        <button class="btn accent" id="exportCsv">Export CSV</button>
+        <button class="btn primary" id="seedDemo">Seed demo data</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav class="sidebar">
+      <h3>Sections</h3>
+      <div class="menu">
+        <button class="active" data-section="overview">Overview</button>
+        <button data-section="members">Members</button>
+        <button data-section="payments">Payments</button>
+        <button data-section="pledges">Pledges</button>
+        <button data-section="yearly">Yearly contributions</button>
+        <button data-section="media">Media gallery</button>
+        <button data-section="settings">Settings</button>
+      </div>
+    </nav>
+
+    <div class="content">
+      <!-- Overview -->
+      <section class="panel" id="section-overview">
+        <div class="section-title">
+          <h2>Overview</h2>
+          <div class="muted">Real-time totals by type and group</div>
+        </div>
+        <div class="cards" id="overviewCards">
+          <!-- Cards injected -->
+        </div>
+
+        <div class="mt grid-2">
+          <div class="stack">
+            <div class="section-title">
+              <h2>Totals by cell group (all types)</h2>
+              <div class="muted" id="cellGroupTotalCount"></div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Branch</th>
+                  <th>Cell group</th>
+                  <th>Payment type</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="tableCellTotals"></tbody>
+            </table>
+          </div>
+          <div class="stack">
+            <div class="section-title">
+              <h2>Outstanding (pledges & yearly)</h2>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Type</th>
+                  <th>Title/Year</th>
+                  <th>Target</th>
+                  <th>Paid</th>
+                  <th>Outstanding</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tableOutstanding"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Members -->
+      <section class="panel hidden" id="section-members">
+        <div class="section-title">
+          <h2>Registered members</h2>
+          <div class="muted">Grouped by branch and cell</div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Full name</label>
+            <input id="mName" placeholder="e.g., Jane Doe" />
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input id="mPhone" placeholder="e.g., 07xx xxx xxx" />
+          </div>
+          <div class="field">
+            <label>Branch</label>
+            <select id="mBranch"></select>
+          </div>
+          <div class="field">
+            <label>Cell group</label>
+            <select id="mCell"></select>
+          </div>
+        </div>
+        <div class="mt">
+          <button class="btn primary" id="addMember">Add member</button>
+        </div>
+
+        <div class="mt">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Branch</th>
+                <th>Cell group</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
+            <tbody id="membersTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Payments -->
+      <section class="panel hidden" id="section-payments">
+        <div class="section-title">
+          <h2>Payments</h2>
+          <div class="muted">Tithes, offerings, pledge installments, yearly installments</div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Member</label>
+            <select id="pMember"></select>
+          </div>
+          <div class="field">
+            <label>Type</label>
+            <select id="pType">
+              <option value="tithe">Tithe</option>
+              <option value="offering">Offering</option>
+              <option value="pledge_installment">Pledge installment</option>
+              <option value="yearly_installment">Yearly installment</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Amount</label>
+            <input id="pAmount" type="number" min="1" step="0.01" placeholder="0.00" />
+          </div>
+          <div class="field">
+            <label>Method</label>
+            <select id="pMethod">
+              <option>M-Pesa</option>
+              <option>Card</option>
+              <option>Cash</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Reference (optional)</label>
+            <input id="pRef" placeholder="Transaction ID" />
+          </div>
+          <div class="field">
+            <label>Date</label>
+            <input id="pDate" type="datetime-local" />
+          </div>
+          <div class="field">
+            <label>Pledge ID (for pledge_installment)</label>
+            <select id="pPledge"></select>
+          </div>
+          <div class="field">
+            <label>Yearly contribution ID (for yearly_installment)</label>
+            <select id="pYearly"></select>
+          </div>
+        </div>
+
+        <div class="mt">
+          <button class="btn primary" id="addPayment">Record payment</button>
+        </div>
+
+        <div class="mt">
+          <table>
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Branch</th>
+                <th>Cell</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th>Reference</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsTable"></tbody>
+          </table>
+        </div>
+
+        <div class="totals-footer">
+          <div id="totalsByType"></div>
+          <div id="grandTotal"></div>
+        </div>
+      </section>
+
+      <!-- Pledges -->
+      <section class="panel hidden" id="section-pledges">
+        <div class="section-title">
+          <h2>Pledges</h2>
+          <div class="muted">Create and track pledge commitments</div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Member</label>
+            <select id="plMember"></select>
+          </div>
+          <div class="field">
+            <label>Title</label>
+            <input id="plTitle" placeholder="e.g., Building Fund 2026" />
+          </div>
+          <div class="field">
+            <label>Total amount</label>
+            <input id="plTotal" type="number" min="1" step="0.01" placeholder="0.00" />
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="plStatus">
+              <option value="active">Active</option>
+              <option value="fulfilled">Fulfilled</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt">
+          <button class="btn primary" id="addPledge">Create pledge</button>
+        </div>
+
+        <div class="mt">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Member</th>
+                <th>Title</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Outstanding</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="pledgesTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Yearly contributions -->
+      <section class="panel hidden" id="section-yearly">
+        <div class="section-title">
+          <h2>Yearly contributions</h2>
+          <div class="muted">Create yearly targets and track installments</div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Member</label>
+            <select id="ycMember"></select>
+          </div>
+          <div class="field">
+            <label>Year</label>
+            <input id="ycYear" type="number" min="2024" value="2025" />
+          </div>
+          <div class="field">
+            <label>Target amount</label>
+            <input id="ycTarget" type="number" min="1" step="0.01" placeholder="0.00" />
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="ycStatus">
+              <option value="active">Active</option>
+              <option value="fulfilled">Fulfilled</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt">
+          <button class="btn primary" id="addYearly">Create yearly contribution</button>
+        </div>
+
+        <div class="mt">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Member</th>
+                <th>Year</th>
+                <th>Target</th>
+                <th>Paid</th>
+                <th>Outstanding</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="yearlyTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Media -->
+      <section class="panel hidden" id="section-media">
+        <div class="section-title">
+          <h2>Media gallery</h2>
+          <div class="muted">Upload event images and videos visible in user dashboards</div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Title</label>
+            <input id="mdTitle" placeholder="e.g., Youth Conference" />
+          </div>
+          <div class="field">
+            <label>Type</label>
+            <select id="mdType">
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Visibility</label>
+            <select id="mdVisibility">
+              <option value="all">All</option>
+              <option value="branch">Branch</option>
+              <option value="cell_group">Cell group</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Branch / Cell (optional)</label>
+            <div class="flex">
+              <select id="mdBranch"></select>
+              <select id="mdCell"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field" style="grid-column: 1 / -1;">
+            <label>Media URL</label>
+            <input id="mdUrl" placeholder="https://cdn.example.com/file.jpg" />
+          </div>
+        </div>
+
+        <div class="mt">
+          <button class="btn primary" id="addMedia">Upload media</button>
+        </div>
+
+        <div class="mt gallery" id="mediaGallery"></div>
+      </section>
+
+      <!-- Settings -->
+      <section class="panel hidden" id="section-settings">
+        <div class="section-title">
+          <h2>Settings</h2>
+          <div class="muted">Branches, cells, data reset</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="stack">
+            <h3 class="muted">Add branch</h3>
+            <div class="form-row">
+              <div class="field">
+                <label>Branch name</label>
+                <input id="sBranchName" placeholder="e.g., Rongai" />
+              </div>
+              <div class="field">
+                <label>Location</label>
+                <input id="sBranchLoc" placeholder="e.g., Kajiado" />
+              </div>
+              <div class="field" style="align-self: end;">
+                <button class="btn primary" id="addBranch">Add branch</button>
+              </div>
+            </div>
+            <table class="mt">
+              <thead><tr><th>ID</th><th>Name</th><th>Location</th></tr></thead>
+              <tbody id="branchesTable"></tbody>
+            </table>
+          </div>
+
+          <div class="stack">
+            <h3 class="muted">Add cell group</h3>
+            <div class="form-row">
+              <div class="field">
+                <label>Branch</label>
+                <select id="sCellBranch"></select>
+              </div>
+              <div class="field">
+                <label>Cell name</label>
+                <input id="sCellName" placeholder="e.g., Eagles" />
+              </div>
+              <div class="field" style="align-self: end;">
+                <button class="btn primary" id="addCell">Add cell</button>
+              </div>
+            </div>
+            <table class="mt">
+              <thead><tr><th>ID</th><th>Branch</th><th>Name</th></tr></thead>
+              <tbody id="cellsTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="mt">
+          <button class="btn danger" id="resetAll">Reset all demo data</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Simple in-browser datastore using localStorage (for demo).
+    const DB = {
+      load() {
+        const d = JSON.parse(localStorage.getItem('igc-db') || '{}');
+        this.branches = d.branches || [];
+        this.cells = d.cells || [];
+        this.members = d.members || [];
+        this.payments = d.payments || [];
+        this.pledges = d.pledges || [];
+        this.yearlies = d.yearlies || [];
+        this.media = d.media || [];
+      },
+      save() {
+        const d = {
+          branches: this.branches, cells: this.cells, members: this.members,
+          payments: this.payments, pledges: this.pledges, yearlies: this.yearlies, media: this.media
+        };
+        localStorage.setItem('igc-db', JSON.stringify(d));
+      },
+      branches: [], cells: [], members: [], payments: [], pledges: [], yearlies: [], media: []
+    };
+    DB.load();
+
+    // Helpers
+    const byId = id => document.getElementById(id);
+    const fmt = n => Number(n).toLocaleString('en-KE', { style: 'currency', currency: 'KES' });
+    const nowIso = () => new Date().toISOString().slice(0,16);
+    const findBranch = id => DB.branches.find(b => b.id == id);
+    const findCell = id => DB.cells.find(c => c.id == id);
+    const findMember = id => DB.members.find(m => m.id == id);
+    const uid = (arr) => (arr.length ? Math.max(...arr.map(x=>x.id)) + 1 : 1);
+
+    // Filters state
+    const state = { branchId: '', cellId: '', from: '', to: '' };
+
+    // Populate selects
+    function refreshSelects() {
+      const branchOpts = '<option value="">All branches</option>' + DB.branches.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+      const cellOpts = '<option value="">All cells</option>' + DB.cells.map(c=>{
+        const b = findBranch(c.branch_id); return `<option value="${c.id}">${b?.name || '—'} / ${c.name}</option>`;
+      }).join('');
+      byId('filterBranch').innerHTML = branchOpts;
+      byId('filterCell').innerHTML = cellOpts;
+
+      // Member-context selects
+      byId('mBranch').innerHTML = DB.branches.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+      byId('mCell').innerHTML = DB.cells.map(c=>{
+        const b = findBranch(c.branch_id); return `<option value="${c.id}">${b?.name || '—'} / ${c.name}</option>`;
+      }).join('');
+
+      const memberOpts = DB.members.map(m=>`<option value="${m.id}">${m.full_name} (${findBranch(m.branch_id)?.name || '—'} / ${findCell(m.cell_group_id)?.name || '—'})</option>`).join('');
+      byId('pMember').innerHTML = memberOpts;
+      byId('plMember').innerHTML = memberOpts;
+      byId('ycMember').innerHTML = memberOpts;
+
+      // Pledge & Yearly selects for installments
+      byId('pPledge').innerHTML = '<option value="">—</option>' + DB.pledges.map(p=>`<option value="${p.id}">#${p.id} ${findMember(p.member_id)?.full_name || 'Member'}: ${p.title}</option>`).join('');
+      byId('pYearly').innerHTML = '<option value="">—</option>' + DB.yearlies.map(y=>`<option value="${y.id}">#${y.id} ${findMember(y.member_id)?.full_name || 'Member'}: ${y.year}</option>`).join('');
+
+      // Media scope
+      byId('mdBranch').innerHTML = '<option value="">—</option>' + DB.branches.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+      byId('mdCell').innerHTML = '<option value="">—</option>' + DB.cells.map(c=>{
+        const b = findBranch(c.branch_id); return `<option value="${c.id}">${b?.name || '—'} / ${c.name}</option>`;
+      }).join('');
+      byId('sCellBranch').innerHTML = DB.branches.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+    }
+
+    // Seed demo data
+    function seedDemo() {
+      DB.branches = [
+        { id: 1, name: 'Rongai', location: 'Kajiado' },
+        { id: 2, name: 'Kitengela', location: 'Kajiado' }
+      ];
+      DB.cells = [
+        { id: 1, branch_id: 1, name: 'Eagles' },
+        { id: 2, branch_id: 1, name: 'Lions' },
+        { id: 3, branch_id: 2, name: 'Shalom' }
+      ];
+      DB.members = [
+        { id: 1, full_name: 'Jane Doe', phone: '0700 123 456', email: '', branch_id: 1, cell_group_id: 1, created_at: new Date().toISOString() },
+        { id: 2, full_name: 'John Kamau', phone: '0712 987 654', email: '', branch_id: 1, cell_group_id: 2, created_at: new Date().toISOString() },
+        { id: 3, full_name: 'Mary Akinyi', phone: '0790 555 333', email: '', branch_id: 2, cell_group_id: 3, created_at: new Date().toISOString() }
+      ];
+      DB.pledges = [
+        { id: 1, member_id: 1, title: 'Building Fund 2026', total_amount: 50000, amount_paid: 15000, status: 'active', created_at: new Date().toISOString() }
+      ];
+      DB.yearlies = [
+        { id: 1, member_id: 2, year: 2025, target_amount: 20000, amount_paid: 4000, status: 'active', created_at: new Date().toISOString() }
+      ];
+      DB.payments = [
+        { id: 1, member_id: 1, type: 'tithe', amount: 2000, method: 'M-Pesa', reference: 'TX-001', paid_at: new Date().toISOString() },
+        { id: 2, member_id: 2, type: 'offering', amount: 500, method: 'Cash', reference: '', paid_at: new Date().toISOString() },
+        { id: 3, member_id: 1, type: 'pledge_installment', amount: 5000, method: 'Card', reference: 'PL-123', paid_at: new Date().toISOString() },
+        { id: 4, member_id: 2, type: 'yearly_installment', amount: 2000, method: 'M-Pesa', reference: 'YC-456', paid_at: new Date().toISOString() },
+        { id: 5, member_id: 3, type: 'tithe', amount: 1500, method: 'M-Pesa', reference: 'TX-789', paid_at: new Date().toISOString() }
+      ];
+      DB.media = [
+        { id: 1, title: 'Youth Conference', description: '', url: 'https://picsum.photos/seed/igc1/600/400', type: 'image', visible_to: 'all', branch_id: null, cell_group_id: null, uploaded_at: new Date().toISOString() },
+        { id: 2, title: 'Sunday Service Clip', description: '', url: 'https://www.w3schools.com/html/mov_bbb.mp4', type: 'video', visible_to: 'branch', branch_id: 1, cell_group_id: null, uploaded_at: new Date().toISOString() }
+      ];
+      DB.save();
+      refreshSelects();
+      renderAll();
+    }
+
+    // Rendering functions
+    function renderOverview() {
+      const cardsEl = byId('overviewCards');
+      const totals = sumByType(filteredPayments());
+      const cardDefs = [
+        { key: 'tithe', label: 'Tithes', color: 'var(--primary)' },
+        { key: 'offering', label: 'Offerings', color: 'var(--accent)' },
+        { key: 'pledge_installment', label: 'Pledge installments', color: '#f59e0b' },
+        { key: 'yearly_installment', label: 'Yearly installments', color: '#fb7185' }
+      ];
+      cardsEl.innerHTML = cardDefs.map(c=>`
+        <div class="card" style="box-shadow: 0 8px 20px ${c.color}20;">
+          <h4>${c.label}</h4>
+          <div class="num">${fmt(totals[c.key] || 0)}</div>
+        </div>
+      `).join('');
+
+      // Cell totals table
+      const tbody = byId('tableCellTotals');
+      const rows = groupTotalsByCell(filteredPayments());
+      tbody.innerHTML = rows.map(r=>{
+        const pillClass = r.type === 'tithe' ? 'tithe' : r.type === 'offering' ? 'offering' : r.type === 'pledge_installment' ? 'pledge' : 'yearly';
+        return `<tr>
+          <td>${r.branch}</td>
+          <td>${r.cell}</td>
+          <td><span class="pill ${pillClass}">${r.type.replace('_', ' ')}</span></td>
+          <td>${fmt(r.amount)}</td>
+        </tr>`;
+      }).join('');
+      byId('cellGroupTotalCount').textContent = `${rows.length} rows`;
+
+      // Outstanding table: pledges + yearly
+      const outEl = byId('tableOutstanding');
+      const pledgeRows = DB.pledges.map(p=>{
+        const m = findMember(p.member_id);
+        return {
+          member: m?.full_name || 'Member', type: 'Pledge', title: p.title,
+          target: p.total_amount, paid: p.amount_paid, out: Math.max(0, p.total_amount - p.amount_paid),
+          status: p.status
+        };
+      });
+      const yearlyRows = DB.yearlies.map(y=>{
+        const m = findMember(y.member_id);
+        return {
+          member: m?.full_name || 'Member', type: 'Yearly', title: y.year,
+          target: y.target_amount, paid: y.amount_paid, out: Math.max(0, y.target_amount - y.amount_paid),
+          status: y.status
+        };
+      });
+      const rowsOut = [...pledgeRows, ...yearlyRows].sort((a,b)=>b.out - a.out);
+      outEl.innerHTML = rowsOut.map(r=>`
+        <tr>
+          <td>${r.member}</td>
+          <td>${r.type}</td>
+          <td>${r.title}</td>
+          <td>${fmt(r.target)}</td>
+          <td>${fmt(r.paid)}</td>
+          <td>${fmt(r.out)}</td>
+          <td>${r.status}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderMembers() {
+      const tbody = byId('membersTable');
+      const rows = DB.members.filter(m=>(
+        (!state.branchId || m.branch_id == state.branchId) &&
+        (!state.cellId || m.cell_group_id == state.cellId)
+      ));
+      tbody.innerHTML = rows.map(m=>`
+        <tr>
+          <td>${m.full_name}</td>
+          <td>${m.phone || '—'}</td>
+          <td>${findBranch(m.branch_id)?.name || '—'}</td>
+          <td>${findCell(m.cell_group_id)?.name || '—'}</td>
+          <td>${new Date(m.created_at).toLocaleString()}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderPayments() {
+      const tbody = byId('paymentsTable');
+      const rows = filteredPayments().map(p=>{
+        const m = findMember(p.member_id);
+        const pillClass = p.type === 'tithe' ? 'tithe' : p.type === 'offering' ? 'offering' : p.type === 'pledge_installment' ? 'pledge' : 'yearly';
+        return `<tr>
+          <td>${m?.full_name || 'Member'}</td>
+          <td>${findBranch(m?.branch_id)?.name || '—'}</td>
+          <td>${findCell(m?.cell_group_id)?.name || '—'}</td>
+          <td><span class="pill ${pillClass}">${p.type.replace('_', ' ')}</span></td>
+          <td>${fmt(p.amount)}</td>
+          <td>${p.method || '—'}</td>
+          <td>${p.reference || '—'}</td>
+          <td>${new Date(p.paid_at).toLocaleString()}</td>
+        </tr>`;
+      });
+      tbody.innerHTML = rows.join('');
+
+      const totals = sumByType(filteredPayments());
+      byId('totalsByType').textContent =
+        `Tithes ${fmt(totals.tithe||0)} • Offerings ${fmt(totals.offering||0)} • Pledge Inst. ${fmt(totals.pledge_installment||0)} • Yearly Inst. ${fmt(totals.yearly_installment||0)}`;
+      const grand = Object.values(totals).reduce((a,b)=>a+(b||0), 0);
+      byId('grandTotal').textContent = `Grand total: ${fmt(grand)}`;
+    }
+
+    function renderPledges() {
+      const tbody = byId('pledgesTable');
+      tbody.innerHTML = DB.pledges.map(p=>{
+        const m = findMember(p.member_id);
+        const out = Math.max(0, p.total_amount - p.amount_paid);
+        return `<tr>
+          <td>#${p.id}</td>
+          <td>${m?.full_name || 'Member'}</td>
+          <td>${p.title}</td>
+          <td>${fmt(p.total_amount)}</td>
+          <td>${fmt(p.amount_paid)}</td>
+          <td>${fmt(out)}</td>
+          <td>${p.status}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderYearly() {
+      const tbody = byId('yearlyTable');
+      tbody.innerHTML = DB.yearlies.map(y=>{
+        const m = findMember(y.member_id);
+        const out = Math.max(0, y.target_amount - y.amount_paid);
+        return `<tr>
+          <td>#${y.id}</td>
+          <td>${m?.full_name || 'Member'}</td>
+          <td>${y.year}</td>
+          <td>${fmt(y.target_amount)}</td>
+          <td>${fmt(y.amount_paid)}</td>
+          <td>${fmt(out)}</td>
+          <td>${y.status}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function renderMedia() {
+      const gal = byId('mediaGallery');
+      const rows = DB.media.filter(m=>{
+        if (state.branchId && m.visible_to === 'branch') return m.branch_id == state.branchId;
+        if (state.cellId && m.visible_to === 'cell_group') return m.cell_group_id == state.cellId;
+        return true;
+      });
+      gal.innerHTML = rows.map(m=>{
+        const isVideo = m.type === 'video';
+        const mediaTag = isVideo ? `<video src="${m.url}" controls></video>` : `<img src="${m.url}" alt="${m.title}">`;
+        const scope = m.visible_to === 'all' ? 'All' :
+                      m.visible_to === 'branch' ? `Branch: ${findBranch(m.branch_id)?.name || '—'}` :
+                      `Cell: ${findCell(m.cell_group_id)?.name || '—'}`;
+        return `<div class="media-tile">
+          ${mediaTag}
+          <div class="meta"><strong>${m.title}</strong><br>${scope}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderSettings() {
+      const bT = byId('branchesTable');
+      bT.innerHTML = DB.branches.map(b=>`<tr><td>#${b.id}</td><td>${b.name}</td><td>${b.location || '—'}</td></tr>`).join('');
+      const cT = byId('cellsTable');
+      cT.innerHTML = DB.cells.map(c=>`<tr><td>#${c.id}</td><td>${findBranch(c.branch_id)?.name || '—'}</td><td>${c.name}</td></tr>`).join('');
+    }
+
+    function renderAll() {
+      renderOverview();
+      renderMembers();
+      renderPayments();
+      renderPledges();
+      renderYearly();
+      renderMedia();
+      renderSettings();
+    }
+
+    // Filters & section switching
+    document.querySelectorAll('.menu button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const sec = btn.dataset.section;
+        document.querySelectorAll('section.panel').forEach(s=>s.classList.add('hidden'));
+        byId(`section-${sec}`).classList.remove('hidden');
+      });
+    });
+    byId('filterBranch').addEventListener('change', (e)=>{ state.branchId = e.target.value; renderAll(); });
+    byId('filterCell').addEventListener('change', (e)=>{ state.cellId = e.target.value; renderAll(); });
+    byId('filterFrom').addEventListener('change', (e)=>{ state.from = e.target.value; renderAll(); });
+    byId('filterTo').addEventListener('change', (e)=>{ state.to = e.target.value; renderAll(); });
+    byId('resetFilters').addEventListener('click', ()=>{
+      state.branchId = ''; state.cellId = ''; state.from = ''; state.to = '';
+      byId('filterBranch').value = ''; byId('filterCell').value = ''; byId('filterFrom').value = ''; byId('filterTo').value = '';
+      renderAll();
+    });
+
+    // CSV export
+    byId('exportCsv').addEventListener('click', ()=>{
+      const rows = filteredPayments().map(p=>{
+        const m = findMember(p.member_id);
+        return {
+          Member: m?.full_name || '',
+          Branch: findBranch(m?.branch_id)?.name || '',
+          Cell: findCell(m?.cell_group_id)?.name || '',
+          Type: p.type,
+          Amount: p.amount,
+          Method: p.method || '',
+          Reference: p.reference || '',
+          Date: new Date(p.paid_at).toISOString()
+        };
+      });
+      const header = Object.keys(rows[0] || { Member: '', Branch: '', Cell: '', Type: '', Amount: '', Method: '', Reference: '', Date: '' }).join(',');
+      const csv = [header, ...rows.map(r=>Object.values(r).join(','))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'payments.csv'; a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Seed data
+    byId('seedDemo').addEventListener('click', seedDemo);
+
+    // Add member
+    byId('addMember').addEventListener('click', ()=>{
+      const full_name = byId('mName').value.trim();
+      const phone = byId('mPhone').value.trim();
+      const branch_id = Number(byId('mBranch').value);
+      const cell_group_id = Number(byId('mCell').value);
+      if (!full_name || !branch_id || !cell_group_id) return alert('Please fill name, branch, and cell group.');
+      DB.members.push({ id: uid(DB.members), full_name, phone, email: '', branch_id, cell_group_id, created_at: new Date().toISOString() });
+      DB.save(); refreshSelects(); renderMembers();
+      byId('mName').value = ''; byId('mPhone').value = '';
+    });
+
+    // Record payment (with pledge/yearly updates)
+    byId('addPayment').addEventListener('click', ()=>{
+      const member_id = Number(byId('pMember').value);
+      const type = byId('pType').value;
+      const amount = Number(byId('pAmount').value);
+      const method = byId('pMethod').value;
+      const reference = byId('pRef').value.trim();
+      const paid_at = byId('pDate').value ? new Date(byId('pDate').value).toISOString() : new Date().toISOString();
+      const pledgeId = byId('pPledge').value ? Number(byId('pPledge').value) : null;
+      const yearlyId = byId('pYearly').value ? Number(byId('pYearly').value) : null;
+
+      if (!member_id || !type || !amount) return alert('Please select member, type, and amount.');
+      // Create payment
+      DB.payments.push({ id: uid(DB.payments), member_id, type, amount, method, reference, paid_at });
+      // Update pledge/yearly
+      if (type === 'pledge_installment' && pledgeId) {
+        const pl = DB.pledges.find(p=>p.id == pledgeId);
+        if (pl) {
+          pl.amount_paid = (pl.amount_paid || 0) + amount;
+          if (pl.amount_paid >= pl.total_amount) pl.status = 'fulfilled';
+        }
+      }
+      if (type === 'yearly_installment' && yearlyId) {
+        const yc = DB.yearlies.find(y=>y.id == yearlyId);
+        if (yc) {
+          yc.amount_paid = (yc.amount_paid || 0) + amount;
+          if (yc.amount_paid >= yc.target_amount) yc.status = 'fulfilled';
+        }
+      }
+      DB.save();
+      renderOverview(); renderPayments(); renderPledges(); renderYearly();
+      byId('pAmount').value = ''; byId('pRef').value = '';
+    });
+
+    // Create pledge
+    byId('addPledge').addEventListener('click', ()=>{
+      const member_id = Number(byId('plMember').value);
+      const title = byId('plTitle').value.trim();
+      const total_amount = Number(byId('plTotal').value);
+      const status = byId('plStatus').value;
+      if (!member_id || !title || !total_amount) return alert('Please fill member, title, and total.');
+      DB.pledges.push({ id: uid(DB.pledges), member_id, title, total_amount, amount_paid: 0, status, created_at: new Date().toISOString() });
+      DB.save(); refreshSelects(); renderPledges(); renderOverview();
+      byId('plTitle').value = ''; byId('plTotal').value = '';
+    });
+
+    // Create yearly contribution
+    byId('addYearly').addEventListener('click', ()=>{
+      const member_id = Number(byId('ycMember').value);
+      const year = Number(byId('ycYear').value);
+      const target_amount = Number(byId('ycTarget').value);
+      const status = byId('ycStatus').value;
+      if (!member_id || !year || !target_amount) return alert('Please fill member, year, and target.');
+      DB.yearlies.push({ id: uid(DB.yearlies), member_id, year, target_amount, amount_paid: 0, status, created_at: new Date().toISOString() });
+      DB.save(); refreshSelects(); renderYearly(); renderOverview();
+      byId('ycTarget').value = '';
+    });
+
+    // Upload media
+    byId('addMedia').addEventListener('click', ()=>{
+      const title = byId('mdTitle').value.trim();
+      const type = byId('mdType').value;
+      const visible_to = byId('mdVisibility').value;
+      const url = byId('mdUrl').value.trim();
+      const branch_id = byId('mdBranch').value ? Number(byId('mdBranch').value) : null;
+      const cell_group_id = byId('mdCell').value ? Number(byId('mdCell').value) : null;
+      if (!title || !type || !url) return alert('Please provide title, type, and media URL.');
+      if (visible_to === 'branch' && !branch_id) return alert('Select branch for branch visibility.');
+      if (visible_to === 'cell_group' && !cell_group_id) return alert('Select cell group for cell-group visibility.');
+      DB.media.push({ id: uid(DB.media), title, description:'', url, type, visible_to, branch_id, cell_group_id, uploaded_at: new Date().toISOString() });
+      DB.save(); renderMedia();
+      byId('mdTitle').value = ''; byId('mdUrl').value = '';
+    });
+
+    // Settings: add branch
+    byId('addBranch').addEventListener('click', ()=>{
+      const name = byId('sBranchName').value.trim();
+      const location = byId('sBranchLoc').value.trim();
+      if (!name) return alert('Branch name required.');
+      DB.branches.push({ id: uid(DB.branches), name, location });
+      DB.save(); refreshSelects(); renderSettings();
+      byId('sBranchName').value = ''; byId('sBranchLoc').value = '';
+    });
+    // Settings: add cell
+    byId('addCell').addEventListener('click', ()=>{
+      const branch_id = Number(byId('sCellBranch').value);
+      const name = byId('sCellName').value.trim();
+      if (!branch_id || !name) return alert('Branch and cell name required.');
+      DB.cells.push({ id: uid(DB.cells), branch_id, name });
+      DB.save(); refreshSelects(); renderSettings();
+      byId('sCellName').value = '';
+    });
+
+    // Reset demo data
+    byId('resetAll').addEventListener('click', ()=>{
+      if (!confirm('Reset all demo data?')) return;
+      DB.branches = []; DB.cells = []; DB.members = []; DB.payments = []; DB.pledges = []; DB.yearlies = []; DB.media = [];
+      DB.save(); refreshSelects(); renderAll();
+    });
+
+    // Utility aggregations
+    function filteredPayments() {
+      return DB.payments.filter(p=>{
+        const m = findMember(p.member_id);
+        if (!m) return false;
+        if (state.branchId && m.branch_id != state.branchId) return false;
+        if (state.cellId && m.cell_group_id != state.cellId) return false;
+        if (state.from && new Date(p.paid_at) < new Date(state.from)) return false;
+        if (state.to && new Date(p.paid_at) > new Date(state.to + 'T23:59')) return false;
+        return true;
+      });
+    }
+    function sumByType(payments) {
+      return payments.reduce((acc,p)=>{ acc[p.type] = (acc[p.type]||0) + Number(p.amount); return acc; }, {});
+    }
+    function groupTotalsByCell(payments) {
+      const map = {};
+      payments.forEach(p=>{
+        const m = findMember(p.member_id);
+        const key = `${m.branch_id}-${m.cell_group_id}-${p.type}`;
+        map[key] = map[key] || { branch: findBranch(m.branch_id)?.name || '—', cell: findCell(m.cell_group_id)?.name || '—', type: p.type, amount: 0 };
+        map[key].amount += Number(p.amount);
+      });
+      return Object.values(map).sort((a,b)=>a.branch.localeCompare(b.branch) || a.cell.localeCompare(b.cell) || a.type.localeCompare(b.type));
+    }
+
+    // Init
+    refreshSelects();
+    if (!DB.branches.length) seedDemo();
+    byId('pDate').value = nowIso();
+    renderAll();
+  </script>
+</body>
+</html>
